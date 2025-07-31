@@ -48,16 +48,15 @@ class Game:
 
     def _load_pieces_from_csv(self, csv_path: pathlib.Path):
         with csv_path.open() as f:
-            reader = csv.reader(f)
-            for row_idx, row in enumerate(reader):
-                for col_idx, code in enumerate(row):
+            # reader = csv.reader(f)
+            for row_idx, row in enumerate(f):
+                for col_idx, code in enumerate(row.strip().split(",")):
                     code = code.strip()
-                    if not code:
-                        continue
-                    cell = (row_idx, col_idx)
-                    piece = self.piece_factory.create_piece(code, cell)
-                    self.pieces[piece.get_id()] = piece
-                    self.pos_to_piece[cell] = piece
+                    if code:
+                        cell = (row_idx, col_idx)
+                        piece = self.piece_factory.create_piece(code, cell)
+                        self.pieces[piece.get_id()] = piece
+                        self.pos_to_piece[cell] = piece
 
     def game_time_ms(self) -> int:
         return int((time.monotonic() - self.start_time) * 1000)
@@ -745,14 +744,24 @@ class Game:
         """קובע פונקציה לשליחת מהלכים לרשת"""
         self.network_callback = callback
 
-    def apply_server_update(self, update_data):
-        """מטפל בעדכון מהשרת"""
-        try:
-            board_state = update_data.get("board", {})
-            print(f"🔄 מעדכן לוח מהשרת: {board_state}")
-            # כאן יכול להיות לוגיקה לעדכון הלוח
-        except Exception as e:
-            print(f"❌ שגיאה בעדכון מהשרת: {e}")
+    # def apply_server_update(self, update_data):
+    #     """מטפל בעדכון מהשרת"""
+    #     try:
+    #         board_state = update_data.get("board", {})
+    #         print(f"🔄 מעדכן לוח מהשרת: {board_state}")
+    #         # כאן יכול להיות לוגיקה לעדכון הלוח
+    #     except Exception as e:
+    #         print(f"❌ שגיאה בעדכון מהשרת: {e}")
+
+    def apply_server_update(self, board_state: dict[str, str]):
+        self.pieces.clear()
+        self.pos_to_piece.clear()
+
+        for cell_alg, piece_id in board_state.items():
+            cell = self.board.algebraic_to_cell(cell_alg)
+            piece = self.piece_factory.create_piece(piece_id, cell)
+            self.pieces[piece.get_id()] = piece
+            self.pos_to_piece[cell] = piece
 
     def apply_opponent_move(self, move_data):
         """מטפל במהלך של היריב"""
@@ -826,3 +835,5 @@ class Game:
             return piece_color == 'B'
             
         return False
+    
+    

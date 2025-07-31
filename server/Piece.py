@@ -9,6 +9,10 @@ class Piece:
 
     def __init__(self, piece_id: str, init_state: State , start_ms: int = 0):
         self._id = piece_id
+        
+    def get_valid_moves(self, position, pos_to_piece):
+        return self._moves.get_moves(*position, pos_to_piece)
+
         # self._state = init_state
         # self._current_cmd: Optional[Command] = None
 

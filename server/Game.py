@@ -152,3 +152,44 @@ class Game:
                     self.pos_to_piece[cell].on_command(cmd, now, self.pos_to_piece)
             except Exception as e:
                 print(f"שגיאה בעיבוד פקודה {cmd}: {e}")
+                
+    def handle_move(self, player_color: str, from_alg: str, to_alg: str) -> tuple[bool, str]:
+        from_cell = self.board.algebraic_to_cell(from_alg)
+        to_cell = self.board.algebraic_to_cell(to_alg)
+
+        piece = self.pos_to_piece.get(from_cell)
+        if not piece:
+            return False, "No piece at source"
+
+        piece_color = piece.get_id()[1].lower()
+        if piece_color != player_color[0].lower():
+            return False, "Wrong color"
+
+        valid_moves = piece.get_valid_moves(from_cell, self.pos_to_piece)
+        if to_cell not in valid_moves:
+            return False, "Invalid move"
+
+        # עדכון הלוח
+        self.pos_to_piece[to_cell] = piece
+        del self.pos_to_piece[from_cell]
+        piece.set_position(to_cell)
+
+        return True, "OK"
+
+    def handle_jump(self, player_color: str, pos_alg: str) -> tuple[bool, str]:
+        cell = self.board.algebraic_to_cell(pos_alg)
+        piece = self.pos_to_piece.get(cell)
+        if not piece:
+            return False, "No piece to jump"
+        piece_color = piece.get_id()[1].lower()
+        if piece_color != player_color[0].lower():
+            return False, "Wrong color"
+        # נקרא jump סטטי שלא משנה מיקום — רק שדר
+        return True, "Jumped"
+
+    def get_board_state(self) -> dict[str, str]:
+        state = {}
+        for pos, piece in self.pos_to_piece.items():
+            alg = self.board.cell_to_algebraic(pos)
+            state[alg] = piece.get_id()
+        return state
