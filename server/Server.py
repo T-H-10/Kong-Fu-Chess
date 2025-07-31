@@ -32,21 +32,36 @@ async def notify_all():
         await asyncio.gather(*[ws.send(msg) for ws in clients])
 
 async def handle_client(websocket):
-    global clients
-
-    # הקצאת צבע ללקוח החדש
-    if "white" not in clients.values():
-        clients[websocket] = "white"
+    # global clients
+    client_id = id(websocket)
+    
+    # הקצאת צבע
+    colors_in_use = [c["color"] for c in clients.values()]
+    if "white" not in colors_in_use:
+        clients[client_id] = {"ws": websocket, "color": "white"}
         await websocket.send(json.dumps({"type": "assign_color", "color": "white"}))
         print("✅ לקוח לבן התחבר")
-    elif "black" not in clients.values():
-        clients[websocket] = "black"
+    elif "black" not in colors_in_use:
+        clients[client_id] = {"ws": websocket, "color": "black"}
         await websocket.send(json.dumps({"type": "assign_color", "color": "black"}))
         print("✅ לקוח שחור התחבר")
     else:
         await websocket.send(json.dumps({"type": "error", "message": "כבר יש 2 שחקנים"}))
         await websocket.close()
         return
+    # # הקצאת צבע ללקוח החדש
+    # if "white" not in clients.values():
+    #     clients[websocket] = "white"
+    #     await websocket.send(json.dumps({"type": "assign_color", "color": "white"}))
+    #     print("✅ לקוח לבן התחבר")
+    # elif "black" not in clients.values():
+    #     clients[websocket] = "black"
+    #     await websocket.send(json.dumps({"type": "assign_color", "color": "black"}))
+    #     print("✅ לקוח שחור התחבר")
+    # else:
+    #     await websocket.send(json.dumps({"type": "error", "message": "כבר יש 2 שחקנים"}))
+    #     await websocket.close()
+    #     return
 
     print(f"📊 כמות לקוחות מחוברים: {len(clients)}")
 
