@@ -24,11 +24,12 @@ class Board:
     #         H_cells=self.H_cells,
     #         img=copy.deepcopy(self.img)
     #     )
-    # def cell_to_world(self, cell: tuple[int, int]) -> tuple[int, int]:
-    #     row, col = cell
-    #     x = col * self.cell_W_pix
-    #     y = row * self.cell_H_pix
-    #     return x, y
+    def cell_to_world(self, cell: tuple[int, int]) -> tuple[int, int]:
+        row, col = cell
+        x = col * self.cell_W_pix
+        y = row * self.cell_H_pix
+        return x, y
+    
     def algebraic_to_cell(self, notation: str) -> Tuple[int, int]:
         """
         Converts algebraic notation (e.g., "a1") to board coordinates.

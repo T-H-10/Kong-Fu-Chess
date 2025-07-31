@@ -83,8 +83,8 @@ class Piece:
 #             return cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
 #         return img
 
-#     def get_id(self):
-#         return self._id
+    def get_id(self):
+        return self._id
 
 #     def get_command(self):
 #         return self._state.get_command()

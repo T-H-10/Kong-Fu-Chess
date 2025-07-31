@@ -13,8 +13,8 @@ class State:
         self.transitions: Dict[str, "State"] = {}
         self._current_command: Optional[Command] = None
 
-#     def set_transition(self, event: str, target: "State"):
-#         self.transitions[event] = target
+    def set_transition(self, event: str, target: "State"):
+        self.transitions[event] = target
 
 #     def reset(self, cmd: Command):
 #         self._current_command = cmd
