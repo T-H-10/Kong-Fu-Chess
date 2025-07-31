@@ -380,84 +380,6 @@ class Game:
                     )
                     self.user_input_queue.put(cmd)
 
-    # def _wait_for_enter(self, message: str, background: Optional[Img] = None):
-    #     if background:
-    #         img = Img()
-    #         img.img = background.img.copy()
-    #     else:
-    #         img = Img()
-    #         img.img = self.board.img.img.copy()
-
-    #     lines = message.split('\n')
-    #     font = cv2.FONT_HERSHEY_SIMPLEX
-    #     font_scale = 1.4
-    #     thickness = 2
-    #     color = (0, 0, 255, 255)
-
-    #     total_height = 0
-    #     line_sizes = []
-    #     for line in lines:
-    #         (w, h), _ = cv2.getTextSize(line, font, font_scale, thickness)
-    #         line_sizes.append((w, h))
-    #         total_height += h + 10
-
-    #     y0 = (img.img.shape[0] - total_height) // 2
-
-    #     for i, line in enumerate(lines):
-    #         w, h = line_sizes[i]
-    #         x = (img.img.shape[1] - w) // 2
-    #         y = y0 + h + i * (h + 10)
-    #         img.put_text(line, x, y, font_scale, color=color, thickness=thickness)
-
-    #     cv2.imshow("Chess", img.img)
-    #     print(message)
-
-    #     while True:
-    #         key = cv2.waitKey(100)
-    #         if key == 13:
-    #             break
-
-    #     cv2.destroyAllWindows()
-
-
-
-    # def run(self):
-
-    #     self._wait_for_enter("Press ENTER\n to start the game")
-    #     # אתחול ת'ראד הקלט
-    #     self.start_keyboard_thread()
-
-    #     start_ms = self.game_time_ms()
-    #     for piece in self.pieces.values():
-    #         piece.reset(start_ms)
-
-    #     while self._running and not self._is_win():
-    #         now = self.game_time_ms()
-
-    #         # עדכון הכלים
-    #         for piece in self.pieces.values():
-    #             piece.update(now , self.pos_to_piece)
-
-    #         # עידכון המפה של המיקומים
-    #         self._update_position_mapping()
-
-    #         # טיפול בפקודות המתינות בתור
-    #         while not self.user_input_queue.empty():
-    #             cmd = self.user_input_queue.get()
-    #             cell = self.board.algebraic_to_cell(cmd.params[0])
-    #             if cell in self.pos_to_piece:
-    #                 self.pos_to_piece[cell].on_command(cmd, now,self.pos_to_piece)
-
-    #         self._draw()
-
-    #         cv2.imshow("Chess", self._current_board.img.img)
-    #         # שימוש ב-waitKey קצר לצורך צביעת החלון בלבד
-    #         cv2.waitKey(1)
-
-    #     self._announce_win()
-    #     self._running = False
-    #     cv2.destroyAllWindows()
-
     def run(self):
         background_width = 1530
         background_height = 850
@@ -797,17 +719,6 @@ class Game:
                     )
                     self.user_input_queue.put(cmd)
                 self._reset_selection2()
-
-    # def _reset_selection(self):
-    #     self._selection_mode = "source"
-    #     self._selected_source = None
-
-    # def _reset_selection2(self):
-    #     self._selection_mode2 = "source"
-    #     self._selected_source2 = Nonest_alg]
-    #             )
-    #             self.user_input_queue.put(cmd)
-    #         self._reset_selection2()
 
     def _reset_selection(self):
         self._selection_mode = "source"
